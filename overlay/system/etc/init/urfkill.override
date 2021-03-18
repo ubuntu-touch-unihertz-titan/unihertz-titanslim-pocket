@@ -1,0 +1,20 @@
+# adapt urfkill startup script for MediaTek devices
+
+start on started lightdm
+
+script
+    if [ -f /usr/bin/getprop ]
+    then
+        # Wait for the property system to be up.
+        while [ ! -e /dev/socket/property_service ]; do sleep 0.1; done
+
+        # Wait for properties to be loaded.
+        while [ "$(getprop vendor.service.nvram_init)" != "Ready" ]; do sleep 0.2; done
+    fi
+
+    # enable Wi-Fi adapter in client mode
+    while [ ! -e /dev/wmtWifi ]; do sleep 0.2; done
+    echo 1 > /dev/wmtWifi
+
+    exec /usr/lib/aarch64-linux-gnu/urfkill/urfkilld
+end script
