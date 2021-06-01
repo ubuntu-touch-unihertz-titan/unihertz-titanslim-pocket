@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# AppArmor hack for Unihertz Titan
+apparmor_module="/lib/modules/$(uname -r)/kernel/security/apparmor/apparmor.ko"
+if [ -e $apparmor_module ]; then
+    /sbin/insmod $apparmor_module
+fi
+
+# Execute actual init
+exec /sbin/init $@
