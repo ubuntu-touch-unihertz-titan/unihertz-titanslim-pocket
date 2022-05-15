@@ -1,0 +1,45 @@
+image: ubuntu:20.04
+
+build:
+  stage: build
+  script:
+    - apt update
+    - apt install android-tools-mkbootimg bc bison build-essential ca-certificates cpio curl flex git kmod libssl-dev libtinfo5 python2 sudo unzip wget xz-utils -y --no-install-recommends
+    - ln -sf python2.7 /usr/bin/python
+    - wget https://raw.githubusercontent.com/LineageOS/android_system_core/lineage-17.1/mkbootimg/mkbootimg.py -O /usr/bin/mkbootimg
+    - ./build.sh
+  artifacts:
+    paths:
+      - out/*
+
+flashable:
+  stage: deploy
+  script:
+    - apt update
+    - apt install -y git img2simg jq sudo wget xz-utils
+    - git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools -b halium-11 build
+    - DEVICE="$(source deviceinfo && echo $deviceinfo_codename)"
+    - ./build/fetch-and-prepare-latest-ota.sh "16.04/arm64/android9/devel" "$DEVICE" ota
+    - mkdir -p out
+    - ./build/system-image-from-ota.sh ota/ubuntu_command out
+  artifacts:
+    paths:
+      - out/boot.img
+      - out/system.img
+  when: manual
+
+devel-flashable:
+  stage: deploy
+  script:
+    - apt update
+    - apt install -y git img2simg jq sudo wget xz-utils
+    - git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools -b halium-11 build
+    - DEVICE="$(source deviceinfo && echo $deviceinfo_codename)"
+    - ./build/prepare-fake-ota.sh out/device_$DEVICE.tar.xz ota
+    - mkdir -p out
+    - ./build/system-image-from-ota.sh ota/ubuntu_command out
+    - mv out/rootfs.img out/ubuntu.img
+  artifacts:
+    paths:
+      - out/boot.img
+      - out/ubuntu.img
