@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# We need to grab ANDROID_ROOT from /etc/environment, because Mir uses
+# it to find input configuration files and autopilot won't work without that.
+. /etc/environment
+export ANDROID_ROOT
+export MIR_SERVER_ENABLE_MIRCLIENT=1
+export LD_PRELOAD=libtls-padding.so
+
+exec unity-system-compositor --enable-num-framebuffers-quirk=true --disable-overlays=false --console-provider=none --spinner=$SNAP/usr/bin/unity-system-compositor-spinner $@
