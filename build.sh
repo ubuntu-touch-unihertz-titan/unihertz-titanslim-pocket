@@ -82,6 +82,8 @@ fi
 
 cp -av overlay/* "${TMP}/"
 "$SCRIPT/build-tarball-mainline.sh" "${deviceinfo_codename}" "${OUT}" "${TMP}"
+# create device tarball for https://wiki.debian.org/UsrMerge rootfs
+"$SCRIPT/build-tarball-mainline.sh" "${deviceinfo_codename}" "${OUT}" "${TMP}" "usrmerge"
 
 if [ -z "$BUILD_DIR" ]; then
     rm -r "${TMP}"
