@@ -1,0 +1,30 @@
+lxc.rootfs.path = /var/lib/lxc/android/rootfs
+lxc.uts.name = armhf
+lxc.namespace.keep = ipc uts user
+
+lxc.log.syslog = daemon
+# Uncomment for more debugging info.
+# lxc.log.level = 3
+
+lxc.net.0.type = none
+
+lxc.tty.dir = lxc
+lxc.tty.max = 4
+lxc.pty.max = 1024
+lxc.cap.drop = mac_admin mac_override
+
+lxc.hook.pre-start = /var/lib/lxc/android/pre-start.sh
+lxc.hook.mount = /var/lib/lxc/android/mount.sh
+lxc.hook.post-stop = /var/lib/lxc/android/post-stop.sh
+
+lxc.apparmor.profile = unconfined
+lxc.autodev = 0
+
+# Doing part of Android's first stage init
+lxc.mount.entry = tmpfs dev tmpfs nosuid,mode=0755 0 0
+lxc.mount.entry = /dev/__properties__ dev/__properties__ bind bind,create=dir 0 0
+lxc.mount.entry = /dev/binderfs dev/binderfs bind bind,create=dir,optional 0 0
+lxc.mount.entry = /dev/socket dev/socket bind bind,create=dir 0 0
+lxc.mount.entry = proc proc proc nodev,noexec,nosuid 0 0
+lxc.mount.entry = sys sys sysfs nodev,noexec,nosuid 0 0
+lxc.mount.entry = selinuxfs sys/fs/selinux selinuxfs optional 0 0

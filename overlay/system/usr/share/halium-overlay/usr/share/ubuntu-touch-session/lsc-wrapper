@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Allow system integrators to tweak the default system compositor behavior
+LSC_FLAGS="--enable-num-framebuffers-quirk=true --disable-overlays=false"
+[ -d /etc/default/lsc-wrapper.d ] && . /etc/default/lsc-wrapper.d/*
+
+# We need to grab ANDROID_ROOT from /etc/environment, because Mir uses
+# it to find input configuration files and autopilot won't work without that.
+. /etc/environment
+export ANDROID_ROOT
+export MIR_SERVER_ENABLE_MIRCLIENT=1
+
+# Workaround for running the mir server on QEMU/KVM
+case $(systemd-detect-virt --vm) in
+qemu|kvm)
+    export MIR_MESA_KMS_DISABLE_MODESET_PROBE=1
+esac
+
+# Hybris devices tends to have the TLS (thread-local storage) area clobbered by
+# the Bionic libc. This LD_PRELOAD reserves some space for Bionic libc to clober,
+# so that it doesn't crash.
+# This lib is usually installed on Hybris devices. If not, Glibc will complain
+# but will continue.
+export LD_PRELOAD=libtls-padding.so
+
+# FIXME: this is done primarily to prevent collision with root's user session.
+# This should be done by LightDM when it properly support system compositor
+# over Wayland.
+export XDG_RUNTIME_DIR=/run
+export WAYLAND_DISPLAY=wayland-syscomp
+
+exec lomiri-system-compositor \
+    $LSC_FLAGS \
+    --console-provider=none \
+    --spinner=/usr/bin/lomiri-system-compositor-spinner \
+    "$@"
