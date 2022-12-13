@@ -1,0 +1,85 @@
+name: Build Ubuntu Touch images
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Install build tools/dependencies
+        run: |
+          sudo apt update
+          sudo apt install android-tools-mkbootimg bc bison build-essential ca-certificates cpio curl fakeroot flex git kmod libssl-dev libtinfo5 python2 sudo unzip wget xz-utils -y --no-install-recommends
+          sudo ln -sf python2.7 /usr/bin/python
+          sudo wget https://raw.githubusercontent.com/LineageOS/android_system_tools_mkbootimg/lineage-18.1/mkbootimg.py -O /usr/bin/mkbootimg
+
+      - name: Build device tarball
+        run: ./build.sh
+        
+      - name: Upload build output
+        uses: actions/upload-artifact@v3
+        with:
+          name: device-tarball
+          path: out/*
+
+  devel-flashable:
+    needs: build
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        release: [xenial, focal]
+
+    env:
+      ROOTFS_URL: ${{ matrix.release == 'focal'
+        && 'https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-arm64.tar.gz'
+        || 'https://ci.ubports.com/job/xenial-hybris-android9-rootfs-arm64/lastSuccessfulBuild/artifact/ubuntu-touch-android9-arm64.tar.gz' }}
+      OTA_CHANNEL: ${{ matrix.release == 'focal'
+        && '20.04/arm64/android9plus/devel'
+        || '16.04/arm64/android9/devel' }}
+      DEV_TARBALL_VARIANT: ${{ matrix.release == 'focal' && '_usrmerge' || '' }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download device tarball
+        uses: actions/download-artifact@v3
+        with:
+          name: device-tarball
+          path: out
+
+      - name: Install build tools/dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y fakeroot git img2simg jq sudo wget xz-utils
+
+      - name: Clone halium-generic-adaptation-build-tools
+        run: git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools.git -b halium-11-mke2fs build
+
+      - name: Prepare fake OTA update
+        run: |
+          DEVICE="$(source deviceinfo && echo $deviceinfo_codename)"
+          ./build/prepare-fake-ota.sh out/device_${DEVICE}${DEV_TARBALL_VARIANT}.tar.xz ota
+
+      - name: Create flashable images
+        run: |
+          mkdir -p out
+          ./build/system-image-from-ota.sh ota/ubuntu_command out
+          mv out/rootfs.img out/ubuntu.img
+          xz -T0 out/ubuntu.img
+
+      - name: Upload flashable images
+        continue-on-error: true
+        uses: actions/upload-artifact@v3
+        with:
+          name: images
+          path: |
+            out/boot.img
+            out/ubuntu.img.xz
