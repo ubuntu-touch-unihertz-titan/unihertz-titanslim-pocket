@@ -69,7 +69,7 @@ if [ -n "$deviceinfo_bootimg_prebuilt_kernel" ]; then
         x86) ARCH="x86" ;;
     esac
     mkdir -p "${TMPDOWN}/KERNEL_OBJ/arch/$ARCH/boot"
-    cp "$deviceinfo_bootimg_prebuilt_kernel" "${TMPDOWN}/KERNEL_OBJ/arch/$ARCH/boot/Image.gz"
+    gzip -c "$deviceinfo_bootimg_prebuilt_kernel" > "${TMPDOWN}/KERNEL_OBJ/arch/$ARCH/boot/Image.gz"
 fi
 
 if [ -n "$deviceinfo_prebuilt_dtbo" ]; then
