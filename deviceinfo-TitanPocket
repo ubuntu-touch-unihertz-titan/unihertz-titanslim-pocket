@@ -2,12 +2,14 @@ deviceinfo_name="Titan Pocket"
 deviceinfo_manufacturer="Unihertz"
 deviceinfo_codename="TitanPocket"
 deviceinfo_arch="aarch64"
-# Unihertz is refusing to release kernel source for their devices
-deviceinfo_kernel_source=""
-deviceinfo_kernel_source_branch="halium-11.0"
-deviceinfo_kernel_defconfig=""
+# Unihertz is refusing to release kernel source code for their devices
+# This is generic MT6771 kernel source tree used for building kernel modules
+deviceinfo_kernel_source="https://github.com/ubuntu-touch-unihertz-titan/kernel-alps-mt6771.git"
+deviceinfo_kernel_source_branch="halium-11.0-modules"
+deviceinfo_kernel_defconfig="titanpocket_defconfig"
 deviceinfo_kernel_cmdline="bootopt=64S3,32N2,64N2 buildvariant=user security=apparmor rodata=0 init=/init"
 deviceinfo_kernel_clang_compile="true"
+deviceinfo_kernel_force_scmversion="-g259861466-dirty"
 deviceinfo_flash_pagesize="2048"
 deviceinfo_flash_offset_base="0x40000000"
 deviceinfo_flash_offset_kernel="0x00080000"
