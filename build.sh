@@ -73,7 +73,7 @@ cd "$TMPDOWN"
         [ -d dtc ] || git clone https://android.googlesource.com/platform/external/dtc -b pie-gsi --depth 1
     fi
 
-    [ -d "avb" ] || git clone https://android.googlesource.com/platform/external/avb -b android10-gsi --depth 1
+    [ -d "avb" ] || git clone https://android.googlesource.com/platform/external/avb -b android13-gsi --depth 1
 
     if [ -n "$deviceinfo_kernel_use_dtc_ext" ] && $deviceinfo_kernel_use_dtc_ext; then
         [ -f "dtc_ext" ] || curl --location https://android.googlesource.com/platform/prebuilts/misc/+/refs/heads/android10-gsi/linux-x86/dtc/dtc?format=TEXT | base64 --decode > dtc_ext
