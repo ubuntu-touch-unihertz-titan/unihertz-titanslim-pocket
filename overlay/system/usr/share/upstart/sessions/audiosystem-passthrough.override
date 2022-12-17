@@ -1,0 +1,2 @@
+# add -t af to run audiosystem-passthrough in AudioFlinger mode
+exec /usr/lib/audiosystem-passthrough/audiosystem-passthrough -v -t af -a unix:path=/run/user/32011/pulse/dbus-socket
