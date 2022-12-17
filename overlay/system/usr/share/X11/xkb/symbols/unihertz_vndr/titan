@@ -1,0 +1,43 @@
+partial hidden alphanumeric_keys modifier_keys
+xkb_symbols "modifiers" {
+    key <RALT> { [ISO_Level3_Latch ] };
+    modifier_map Mod5 { ISO_Level3_Latch };
+};
+
+default alphanumeric_keys
+xkb_symbols "us" {
+    name[Group1]="Unihertz Titan English (US)";
+
+    include "us"
+
+    key <AD01> { [           q,                 Q,                colon,                colon ] };
+    key <AD02> { [           w,                 W,                slash,                slash ] };
+    key <AD03> { [           e,                 E,           underscore,           underscore ] };
+    key <AD04> { [           r,                 R,                minus,                minus ] };
+    key <AD05> { [           t,                 T,            parenleft,            parenleft ] };
+    key <AD06> { [           y,                 Y,           parenright,           parenright ] };
+    key <AD07> { [           u,                 U,                    1,                    1 ] };
+    key <AD08> { [           i,                 I,                    2,                    2 ] };
+    key <AD09> { [           o,                 O,                    3,                    3 ] };
+    key <AD10> { [           p,                 P,                    0,                    0 ] };
+
+    key <AC01> { [           a,                 A,                   at,                   at ] };
+    key <AC02> { [           s,                 S,           apostrophe,           apostrophe ] };
+    key <AC03> { [           d,                 D,             quotedbl,             quotedbl ] };
+    key <AC04> { [           f,                 F,                 plus,                 plus ] };
+    key <AC05> { [           g,                 G,             multiply,             multiply ] };
+    key <AC06> { [           h,                 H,           numbersign,           numbersign ] };
+    key <AC07> { [           j,                 J,                    4,                    4 ] };
+    key <AC08> { [           k,                 K,                    5,                    5 ] };
+    key <AC09> { [           l,                 L,                    6,                    6 ] };
+
+    key <AB01> { [           z,                 Z,               exclam,               exclam ] };
+    key <AB02> { [           x,                 X,             question,             question ] };
+    key <AB03> { [           c,                 C,                comma,                comma ] };
+    key <AB04> { [           v,                 V,               period,               period ] };
+    key <AB05> { [           b,                 B,                    7,                    7 ] };
+    key <AB06> { [           n,                 N,                    8,                    8 ] };
+    key <AB07> { [           m,                 M,                    9,                    9 ] };
+
+    include "unihertz_vndr/titan(modifiers)"
+};
