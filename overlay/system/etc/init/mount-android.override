@@ -12,5 +12,8 @@ script
     # prevent gralloc.default.so from being loaded by libhybris
     mount -o bind /dev/null /vendor/lib64/hw/gralloc.default.so
 
+    # hacked liblxc.so.1.2.0 that drops CLONE_NEWIPC flag when creating containers
+    mount -o bind /usr/share/halium-overlay/usr/lib/aarch64-linux-gnu/liblxc.so.1.2.0 /usr/lib/aarch64-linux-gnu/liblxc.so.1.2.0
+
     initctl emit -n mounted-android
 end script
