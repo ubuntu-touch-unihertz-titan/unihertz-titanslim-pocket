@@ -8,7 +8,13 @@ while [ "$(getprop vendor.service.nvram_init)" != "Ready" ]; do sleep 0.2; done
 while [ "$(getprop vendor.mtk.nvram.ready)" != "1" ]; do sleep 0.2; done
 
 # enable Wi-Fi adapter in client mode
-while [ ! -e /dev/wmtWifi ]; do sleep 0.2; done
+while [ ! -e /sys/class/wmtWifi/wmtWifi/dev ]; do sleep 0.2; done
+
+if [ ! -e /dev/wmtWifi ]; then
+    dev=$(cat /sys/class/wmtWifi/wmtWifi/dev)
+    major=${dev%%:*}
+    mknod /dev/wmtWifi c $major 0
+fi
 echo S > /dev/wmtWifi
 
 # set wifi.interface property since urfkill.conf expects that
