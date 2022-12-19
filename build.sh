@@ -132,6 +132,9 @@ fi
 "$SCRIPT/make-bootimage.sh" "${TMPDOWN}" "${TMPDOWN}/KERNEL_OBJ" "${TMPDOWN}/halium-boot-ramdisk.img" "${TMP}/partitions/boot.img"
 
 cp -av overlay/* "${TMP}/"
+if [ -d overlay-${deviceinfo_codename} ]; then
+    cp -av overlay-${deviceinfo_codename}/* "${TMP}/"
+fi
 
 INITRC_PATHS="
 ${TMP}/system/opt/halium-overlay/system/etc/init
