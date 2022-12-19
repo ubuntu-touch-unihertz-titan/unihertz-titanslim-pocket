@@ -1,0 +1,15 @@
+Titan_pocket:
+  Vendor: Unihertz
+  PrettyName: Titan Pocket
+  DeviceType: phone
+  GridUnit: 14
+  SupportedOrientations:
+    - Portrait
+  MirAndroidPlatformServerPartialUpdates:
+    - false
+  MirAndroidPlatformServerBackpressure:
+    - true
+  MirAndroidPlatformServerEglSync:
+    - true
+  MirAndroidPlatformClientFenceSync:
+    - all

@@ -1,0 +1,17 @@
+Titan_Slim:
+  Vendor: Unihertz
+  PrettyName: Titan Slim
+  DeviceType: phone
+  GridUnit: 16
+  SupportedOrientations:
+    - Portrait
+    - Landscape
+    - InvertedLandscape
+  MirAndroidPlatformServerPartialUpdates:
+    - false
+  MirAndroidPlatformServerBackpressure:
+    - true
+  MirAndroidPlatformServerEglSync:
+    - true
+  MirAndroidPlatformClientFenceSync:
+    - all
