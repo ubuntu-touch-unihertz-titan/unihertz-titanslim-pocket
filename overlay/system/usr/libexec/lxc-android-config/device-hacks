@@ -19,3 +19,11 @@ echo S > /dev/wmtWifi
 
 # set wifi.interface property since urfkill.conf expects that
 setprop wifi.interface wlan0
+
+# create device nodes for rfkill and vhci
+if [ ! -e /dev/rfkill ]; then
+    mknod /dev/rfkill c 10 242
+fi
+if [ ! -e /dev/vhci ]; then
+    mknod /dev/vhci c 10 137
+fi
