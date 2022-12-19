@@ -1,0 +1,29 @@
+# Copyright (C) 2020 - Dreemurrs Embedded Labs
+#
+# These services are disabled due to them being unnecessary critical process
+# and crash loop.
+
+service lmkd lmkd_HYBRIS_DISABLED
+    disabled
+    oneshot
+    override
+
+service vendor.imsdatadaemon imsdatadaemon_HYBRIS_DISABLED
+    disabled
+    oneshot
+    override
+
+service vendor.ims_rtp_daemon ims_rtp_daemon_HYBRIS_DISABLED
+    disabled
+    oneshot
+    override
+
+service vendor.usb-hal-1-1 android.hardware.usb@1.1-service_HYBRIS_DISABLED
+    disabled
+    oneshot
+    override
+
+# Disable console as it conflicts with the rootfs console
+service console /system/bin/sh_HYBRIS_DISABLED
+    disabled
+    override

@@ -12,6 +12,10 @@ script
     # prevent gralloc.default.so from being loaded by libhybris
     mount -o bind /dev/null /vendor/lib64/hw/gralloc.default.so
 
+    # use audio HAL over HIDL
+    mount -o bind /usr/share/halium-overlay/system/etc/init/init.disabled.rc /var/lib/lxc/android/rootfs/system/etc/init/init.disabled.rc
+    mount -o bind /system/lib64/hw/audio.hidl_compat.default.so /vendor/lib64/hw/audio.primary.mt6771.so
+
     # hacked liblxc.so.1.2.0 that drops CLONE_NEWIPC flag when creating containers
     mount -o bind /usr/share/halium-overlay/usr/lib/aarch64-linux-gnu/liblxc.so.1.2.0 /usr/lib/aarch64-linux-gnu/liblxc.so.1.2.0
 
