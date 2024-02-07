@@ -42,7 +42,7 @@ jobs:
     strategy:
       matrix:
         device: [TitanPocket, TitanSlim]
-        release: [xenial, focal]
+        release: [focal]
 
     env:
       ROOTFS_URL: ${{ matrix.release == 'focal'
@@ -83,7 +83,8 @@ jobs:
           mv out/rootfs.img out/ubuntu.img
           xz -T0 out/ubuntu.img
 
-      - name: Upload flashable images
+      - name: Upload flashable images to artifacts
+        if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
         continue-on-error: true
         uses: actions/upload-artifact@v3
         with:
@@ -91,3 +92,13 @@ jobs:
           path: |
             out/boot.img
             out/ubuntu.img.xz
+
+      - name: Release flashable images
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        run: |
+            mv out/ubuntu.img.xz ${{ matrix.device }}-ubuntu.img.xz
+            mv out/boot.img ${{ matrix.device }}-boot.img
+            gh release create ${{ github.ref_name }} *-ubuntu.img.xz *-boot.img || \
+                gh release upload ${{ github.ref_name }} *-ubuntu.img.xz *-boot.img --clobber
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
