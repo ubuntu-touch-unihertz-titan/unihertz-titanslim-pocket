@@ -161,17 +161,17 @@ while IFS= read -r path ; do
 done <<< "$BUILDPROP_PATHS"
 
 if [ -z "$deviceinfo_use_overlaystore" ]; then
-    "$SCRIPT/build-tarball-mainline.sh" "${deviceinfo_codename}" "${OUT}" "${TMP}"
-
     # Copy focal-specific overlay
     cp -av overlay-focal/* "${TMP}/"
+
     # create device tarball for https://wiki.debian.org/UsrMerge rootfs
     "$SCRIPT/build-tarball-mainline.sh" "${deviceinfo_codename}" "${OUT}" "${TMP}" "usrmerge"
 else
     "$SCRIPT/build-tarball-mainline.sh" "${deviceinfo_codename}" "${OUT}" "${TMP}" "overlaystore"
-    # create a symlink for _usrmerge variant so that common pipeline just works.
-    ln -sf "device_${deviceinfo_codename}.tar.xz" "${OUT}/device_${deviceinfo_codename}_usrmerge.tar.xz"
 fi
+# compatibility symlink for  _usrmerge variant so that old pipelines just work
+ln -f "${OUT}/device_${deviceinfo_codename}.tar.xz" "${OUT}/device_${deviceinfo_codename}_usrmerge.tar.xz"
+ln -f "${OUT}/device_${deviceinfo_codename}.tar.build" "${OUT}/device_${deviceinfo_codename}_usrmerge.tar.build"
 
 if [ -z "$BUILD_DIR" ]; then
     rm -r "${TMP}"

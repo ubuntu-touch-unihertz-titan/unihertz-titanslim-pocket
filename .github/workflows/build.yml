@@ -68,7 +68,7 @@ jobs:
           sudo apt install -y fakeroot git img2simg jq sudo wget xz-utils
 
       - name: Clone halium-generic-adaptation-build-tools
-        run: git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools.git -b halium-11-mke2fs build
+        run: git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools.git build
 
       - name: Prepare fake OTA update
         run: |
