@@ -75,3 +75,11 @@ it is mounted, then run from PC:
 adb push out/ubuntu.img /data
 adb reboot
 ```
+
+Also, instead using TWRP can do next steps:
+
+    1) mkdir userdata && mv ./TitanSlim-ubuntu.img userdata/ubuntu.img
+    2) Run mke2fs -t ext4 -O \^metadata_csum userdata.img 5120000 -d userdata in upper-level folder
+    3) fastboot flash boot out/boot.img (from github download)
+    4) fastboot flash userdata userdata.img (from step 2)
+    5) fastboot reboot
